@@ -52,7 +52,7 @@
  * to OPT_ON and use m68kmame.h to configure the 68k core.
  */
 #ifndef M68K_COMPILE_FOR_MAME
-#define M68K_COMPILE_FOR_MAME      OPT_ON
+#define M68K_COMPILE_FOR_MAME      OPT_OFF
 #endif /* M68K_COMPILE_FOR_MAME */
 
 
@@ -116,8 +116,9 @@
  * want to properly emulate the m68010 or higher. (moves uses function codes
  * to read/write data from different address spaces)
  */
-#define M68K_EMULATE_FC             OPT_OFF
-#define M68K_SET_FC_CALLBACK(A)     your_set_fc_handler_function(A)
+#define M68K_EMULATE_FC             OPT_SPECIFY_HANDLER
+void m68k_set_fc(unsigned int);
+#define M68K_SET_FC_CALLBACK(A)     m68k_set_fc(A)
 
 
 /* If ON, CPU will call the pc changed callback when it changes the PC by a
@@ -136,14 +137,14 @@
 
 
 /* If ON, the CPU will emulate the 4-byte prefetch queue of a real 68000 */
-#define M68K_EMULATE_PREFETCH       OPT_OFF
+#define M68K_EMULATE_PREFETCH       OPT_ON
 
 
 /* If ON, the CPU will generate address error exceptions if it tries to
  * access a word or longword at an odd address.
  * NOTE: This is only emulated properly for 68000 mode.
  */
-#define M68K_EMULATE_ADDRESS_ERROR  OPT_OFF
+#define M68K_EMULATE_ADDRESS_ERROR  OPT_ON
 
 
 /* Turn ON to enable logging of illegal instruction calls.
