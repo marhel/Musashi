@@ -555,7 +555,7 @@ cpgen     32  .     .     1111...000......  ..........  . . U    .   .   4  unem
 cpscc     32  .     .     1111...001......  ..........  . . U    .   .   4  unemulated
 cptrapcc  32  .     .     1111...001111...  ..........  . . U    .   .   4  unemulated
 dbt       16  .     .     0101000011001...  ..........  U U U   12  12   6
-dbf       16  .     .     0101000111001...  ..........  U U U   14  14   6
+dbf       16  .     .     0101000111001...  ..........  U U U   12  12   6
 dbcc      16  .     .     0101....11001...  ..........  U U U   12  12   6
 divs      16  .     d     1000...111000...  ..........  U U U  158 122  56
 divs      16  .     .     1000...111......  A+-DXWLdxI  U U U  158 122  56
@@ -4391,9 +4391,11 @@ M68KMAKE_OP(dbf, 16, ., .)
 		REG_PC -= 2;
 		m68ki_trace_t0();			   /* auto-disable (see m68kcpu.h) */
 		m68ki_branch_16(offset);
+		USE_CYCLES(CYC_DBCC_F_NOEXP);
 		return;
 	}
 	REG_PC += 2;
+	USE_CYCLES(CYC_DBCC_F_EXP);
 }
 
 
@@ -9450,9 +9452,10 @@ M68KMAKE_OP(suba, 16, ., a)
 
 M68KMAKE_OP(suba, 16, ., .)
 {
+	signed short src = MAKE_INT_16(M68KMAKE_GET_OPER_AY_16);
 	uint* r_dst = &AX;
 
-	*r_dst = MASK_OUT_ABOVE_32(*r_dst - MAKE_INT_16(M68KMAKE_GET_OPER_AY_16));
+	*r_dst = MASK_OUT_ABOVE_32(*r_dst - src);
 }
 
 
@@ -9474,9 +9477,10 @@ M68KMAKE_OP(suba, 32, ., a)
 
 M68KMAKE_OP(suba, 32, ., .)
 {
+	uint src = M68KMAKE_GET_OPER_AY_32;
 	uint* r_dst = &AX;
 
-	*r_dst = MASK_OUT_ABOVE_32(*r_dst - M68KMAKE_GET_OPER_AY_32);
+	*r_dst = MASK_OUT_ABOVE_32(*r_dst - src);
 }
 
 
